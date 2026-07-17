@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Garimpo CS</title>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{background:#0a0a0a;color:#f0f0f0;font-family:'Montserrat',sans-serif;font-size:13px;min-height:100vh}
+input,select,textarea{background:#161616;border:1px solid #2a2a2a;color:#eee;font-family:'Montserrat',sans-serif;font-size:12px;padding:7px 10px;border-radius:6px;width:100%}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#D60000}
+label{font-size:10px;color:#888;display:block;margin-bottom:4px;text-transform:uppercase;letter-spacing:.05em;font-weight:600}
+.fld{margin-bottom:12px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.btn{display:inline-flex;align-items:center;gap:5px;padding:8px 14px;border-radius:6px;font-family:'Montserrat',sans-serif;font-size:11px;font-weight:700;cursor:pointer;border:none;white-space:nowrap}
+.r{background:#D60000!important;color:#fff!important}
+.r:hover{background:#b80000!important}
+.g{background:transparent!important;color:#ccc!important;border:1px solid #333!important}
+.g:hover{border-color:#666!important;color:#fff!important}
+.d{background:#7a1f1f!important;color:#fff!important}
+.bl{background:#16233f!important;color:#7ea2e8!important;border:1px solid #263a6a!important}
+.gr{background:#123322!important;color:#5fcf8f!important;border:1px solid #235a3a!important}
+.header{background:#141414;border-bottom:1px solid #232323;padding:14px 22px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px}
+.logo{font-size:16px;font-weight:800;color:#D60000;letter-spacing:.06em}
+.logo span{color:#eee}
+.hright{display:flex;align-items:center;gap:10px}
+.nav{display:flex;gap:6px}
+.nb{padding:7px 15px;border-radius:6px;font-size:11px;font-weight:700;cursor:pointer;border:none;font-family:'Montserrat',sans-serif}
+.nb.on{background:#D60000!important;color:#fff!important}
+.nb:not(.on){background:transparent!important;color:#888!important;border:1px solid #2a2a2a!important}
+.nb:not(.on):hover{color:#eee!important}
+.srch{width:200px}
+.page{display:none;padding:20px 22px}
+.page.on{display:block}
+.cards{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.card{background:#141414;border:1px solid #232323;border-radius:10px;padding:16px}
+.card-val{font-size:26px;font-weight:800;color:#fff}
+.card-lbl{font-size:10px;color:#777;margin-top:4px;text-transform:uppercase;letter-spacing:.06em;font-weight:600}
+.card-red .card-val{color:#e05a5a}
+.card-amber .card-val{color:#e0a840}
+.card-green .card-val{color:#5fcf8f}
+.paineis{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+.painel,.rblock,.tw{background:#141414;border:1px solid #232323;border-radius:10px}
+.ph{padding:12px 16px;border-bottom:1px solid #232323;display:flex;align-items:center;justify-content:space-between}
+.ph h3,.rblock h4{font-size:11px;text-transform:uppercase;letter-spacing:.07em;color:#999;font-weight:700}
+.pill{background:#1a1a1a;border:1px solid #2a2a2a;padding:2px 9px;border-radius:20px;font-size:10px;color:#999}
+.plist{padding:8px;max-height:340px;overflow-y:auto}
+.prow{display:flex;align-items:flex-start;gap:10px;padding:9px 8px;border-radius:8px;cursor:pointer}
+.prow:hover{background:#1a1a1a}
+.dot{width:8px;height:8px;border-radius:50%;margin-top:5px;flex-shrink:0}
+.dot.red{background:#e05a5a}.dot.amber{background:#e0a840}
+.prow .pnome{font-size:12px;font-weight:700;color:#eee}
+.prow .pdet{font-size:11px;color:#999;margin-top:1px}
+.pempty{padding:30px;text-align:center;color:#555;font-size:12px}
+table{width:100%;border-collapse:collapse}
+th{text-align:left;padding:11px 14px;font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:#777;border-bottom:1px solid #232323;cursor:pointer;white-space:nowrap}
+th:hover{color:#ccc}
+td{padding:11px 14px;border-bottom:1px solid #1c1c1c;font-size:12px;white-space:nowrap}
+tr:last-child td{border-bottom:none}
+tr.rw:hover{background:#181818;cursor:pointer}
+.badge{display:inline-block;padding:3px 9px;border-radius:20px;font-size:10px;font-weight:700}
+.b-ok{background:#123322;color:#5fcf8f}.b-amber{background:#3a2a10;color:#e0a840}.b-red{background:#3a1414;color:#e05a5a}.b-grey{background:#222;color:#888}
+.empty{padding:60px 20px;text-align:center;color:#555}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.65);display:none;z-index:50}
+.ov.on{display:block}
+.drw{position:fixed;top:0;right:0;height:100%;width:460px;max-width:94vw;background:#0e0e0e;z-index:51;transform:translateX(100%);transition:transform .2s;display:flex;flex-direction:column}
+.drw.on{transform:translateX(0)}
+.dhead{background:#D60000;padding:16px 20px}
+.dhead h2{font-size:15px;font-weight:800;color:#fff}
+.dhead small{color:#ffd0d0;font-size:11px;display:block;margin-top:2px}
+.dbody{flex:1;overflow-y:auto;padding:18px 20px}
+.dfoot{padding:14px 20px;border-top:1px solid #232323;display:flex;gap:8px}
+.dfoot .btn{flex:1;justify-content:center}
+.sec{margin-bottom:22px}
+.sech{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid #232323}
+.sech h3{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:#999;font-weight:700}
+.item{background:#161616;border:1px solid #232323;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.itop{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:6px}
+.ititle{font-size:12px;font-weight:700;color:#eee}
+.idate{font-size:10px;color:#777}
+.iactions{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px}
+.iactions .btn{padding:5px 10px;font-size:10px}
+.statrow{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px}
+.sbtn{padding:4px 9px;border-radius:6px;font-size:10px;font-weight:700;cursor:pointer;border:1px solid #2a2a2a;background:#1a1a1a;color:#888}
+.sbtn.on{background:#D60000;color:#fff;border-color:#D60000}
+.jsonbox textarea{height:60px;font-family:monospace;font-size:10.5px;margin-top:8px}
+.hrow{display:flex;gap:8px;align-items:flex-start;background:#161616;border:1px solid #232323;border-radius:8px;padding:10px 12px;margin-bottom:8px}
+.hrow .hmeta{font-size:10px;color:#777;min-width:76px}
+.hrow .htxt{flex:1;font-size:11.5px;color:#ccc}
+.hrow .ix{background:none;border:none;color:#666;cursor:pointer;font-size:12px}
+.covwrap{position:fixed;inset:0;background:rgba(0,0,0,.75);display:none;align-items:center;justify-content:center;z-index:60}
+.covwrap.on{display:flex}
+.covbox{background:#161616;border:1px solid #333;border-radius:10px;padding:20px;width:320px}
+.covbox p{font-size:12.5px;color:#ddd;margin-bottom:16px;line-height:1.5}
+.covbtns{display:flex;gap:8px}.covbtns .btn{flex:1;justify-content:center}
+.toast{position:fixed;bottom:20px;left:50%;transform:translateX(-50%);background:#1a1a1a;border:1px solid #333;padding:10px 18px;border-radius:8px;font-size:12px;color:#eee;z-index:70;display:none}
+.motivo,.fup{background:#1a1212;border:1px solid #3a1f1f;border-radius:6px;padding:8px;margin-top:6px}
+.motivo label,.fup{color:#e08080;font-size:10.5px;font-weight:700}
+.gap{height:8px}
+.rrow{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid #1c1c1c;font-size:12px}
+.rrow:last-child{border-bottom:none}
+.rrow .rv{font-weight:800;color:#fff}
+.bar-wrap{background:#1a1a1a;border-radius:5px;height:7px;flex:1;margin:0 12px}
+.bar{height:100%;background:#D60000;border-radius:5px}
+.churn{display:flex;gap:8px;align-items:center;padding:8px 0;border-bottom:1px solid #1c1c1c;font-size:12px}
+.churn:last-child{border-bottom:none}
+.churn .cn{font-weight:700;flex:1}
+.churn .cflag{background:#3a1414;color:#e05a5a;padding:2px 8px;border-radius:20px;font-size:10px;font-weight:700}
+.hint{font-size:10.5px;color:#666;margin-top:2px}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-thumb{background:#2a2a2a;border-radius:4px}
+.loginwrap{position:fixed;inset:0;background:#0a0a0a;display:flex;align-items:center;justify-content:center;z-index:100}
+.loginbox{width:300px;background:#141414;border:1px solid #232323;border-radius:12px;padding:26px}
+.loginbox .logo{display:block;text-align:center;margin-bottom:18px;font-size:18px}
+.loginerr{color:#e05a5a;font-size:11px;margin-top:8px;display:none}
+.loginload{text-align:center;color:#666;font-size:12px}
+</style>
+</head>
+<body>
+
+<div class="loginwrap" id="loginwrap" style="display:none">
+  <div class="loginbox">
+    <div class="logo">GARIMPO <span style="color:#eee">· CS</span></div>
+    <div class="fld"><label>E-mail</label><input id="loEmail" type="email" placeholder="seu@email.com"></div>
+    <div class="fld"><label>Senha</label><input id="loSenha" type="password" placeholder="••••••••"></div>
+    <button class="btn r" id="btnLogin" style="width:100%">Entrar</button>
+    <div class="loginerr" id="loginErr"></div>
+  </div>
+</div>
+<div class="loginwrap" id="loadwrap"><div class="loginload">Carregando...</div></div>
+
+<div class="header" id="appHeader" style="display:none">
+  <div class="logo">GARIMPO <span>· CS</span></div>
+  <div class="hright">
+    <div class="nav">
+      <button class="nb on" data-pg="dash">Dashboard</button>
+      <button class="nb" data-pg="alu">Alunas</button>
+      <button class="nb" data-pg="rep">Relatórios</button>
+    </div>
+    <input class="srch" id="srch" placeholder="Buscar aluna..." style="display:none">
+    <button class="btn r" id="btnNova" style="display:none">+ Nova aluna</button>
+    <a href="workflow.html" target="_blank" rel="noopener" class="btn g">Guia do processo ↗</a>
+    <button class="btn g" id="btnLogout">Sair</button>
+  </div>
+</div>
+
+<div id="appBody" style="display:none">
+<div class="page on" id="pg-dash">
+  <div class="cards" id="cards"></div>
+  <div class="paineis">
+    <div class="painel"><div class="ph"><h3>A vencer / atenção</h3><span class="pill" id="avCount">0</span></div><div class="plist" id="avList"></div></div>
+    <div class="painel"><div class="ph"><h3>Vencidos / FUP</h3><span class="pill" id="vcCount">0</span></div><div class="plist" id="vcList"></div></div>
+  </div>
+</div>
+
+<div class="page" id="pg-alu">
+  <div class="tw">
+    <table>
+      <thead><tr><th data-col="nome">Aluna</th><th data-col="ciclo">Ciclo</th><th data-col="plano">Plano</th><th data-col="status">Status</th><th data-col="acao">Ação pendente</th><th data-col="ponte">Próx. ponte</th><th data-col="venc">Vencimento</th></tr></thead>
+      <tbody id="tbody"></tbody>
+    </table>
+    <div class="empty" id="empty" style="display:none">Nenhuma aluna cadastrada ainda.<br><br><button class="btn r" id="emptyAdd">+ Nova aluna</button></div>
+  </div>
+</div>
+
+<div class="page" id="pg-rep">
+  <div class="rblock"><h4>Engajamento</h4>
+    <div class="rrow"><span>Taxa de resposta de check-ins</span><span class="rv" id="repTaxa">—</span></div>
+    <div class="rrow"><span>Pontes enviadas × concluídas</span><span class="rv" id="repPontes">—</span></div>
+    <div class="rrow"><span>Pontes em FUP (2+ dias sem resposta)</span><span class="rv" id="repFup">—</span></div>
+    <div class="rrow"><span>Pontes não enviadas no prazo</span><span class="rv" id="repAtrasadas">—</span></div>
+    <div class="rrow"><span>Total de itens vencidos</span><span class="rv" id="repTotalVenc">—</span></div>
+    <div class="rrow"><span>Check-ins pendentes de cadastro no app</span><span class="rv" id="repNaoCad">—</span></div>
+  </div>
+  <div class="rblock"><h4>Vencidos</h4><div id="repVenc"></div></div>
+  <div class="rblock"><h4>Pontes por status</h4><div id="repFunil"></div></div>
+  <div class="rblock"><h4>Sem contato há 10+ dias</h4><div id="repSemContato"></div></div>
+  <div class="rblock"><h4>Base de alunas por plano</h4><div id="repPlanos"></div></div>
+  <div class="rblock"><h4>Motivos de vencimento (check-ins)</h4><div id="repMotivos"></div></div>
+  <div class="rblock"><h4>Motivos de atraso (pontes não enviadas)</h4><div id="repMotivosPt"></div></div>
+  <div class="rblock"><h4>Risco de churn (3+ itens vencidos)</h4><div id="repChurn"></div></div>
+</div>
+
+<div class="ov" id="ov"></div>
+<div class="drw" id="drw">
+  <div class="dhead"><h2 id="dhNome">Nova aluna</h2><small id="dhSub">Preencha o cadastro</small>
+    <a id="btnAbrirChat" href="#" target="_blank" rel="noopener" class="btn g" style="display:none;margin-top:8px;background:#fff!important;color:#D60000!important">Abrir chat da aluna ↗</a>
+  </div>
+  <div class="dbody">
+    <div class="sec">
+      <div class="sech"><h3>Cadastro</h3></div>
+      <div class="fld"><label>Nome</label><input id="fNome" placeholder="Nome completo"></div>
+      <div class="row2">
+        <div class="fld"><label>Plano</label>
+          <select id="fPlano">
+            <option>Mensal</option><option>Trimestral</option><option>Semestral</option><option>Anual</option>
+            <option>Mensal treino</option><option>Trimestral treino</option><option>Semestral treino</option><option>Anual treino</option>
+            <option>Trimestral 360</option><option>Semestral 360</option><option>Anual 360</option>
+            <option>Trimestral treino 360</option><option>Semestral treino 360</option><option>Anual treino 360</option>
+            <option>Parceria/Influencer</option>
+          </select>
+        </div>
+        <div class="fld"><label>Ciclo (override)</label><input id="fCicloOv" type="number" min="1" placeholder="auto"></div>
+      </div>
+      <div class="row2">
+        <div class="fld"><label>Data de entrada</label><input id="fIni" type="date"></div>
+        <div class="fld"><label>Vencimento do plano</label><input id="fVenc" type="date"></div>
+      </div>
+      <div class="fld"><label>Link do SC (chat)</label><input id="fLink" placeholder="https://..."></div>
+      <div class="fld"><label>Overdelivery sugerido</label><textarea id="fOver" style="height:52px"></textarea></div>
+      <div id="acaoBox" style="display:none" class="item"><div class="ititle">Ação pendente</div><div style="font-size:11.5px;color:#bbb;margin-top:4px" id="acaoTxt"></div></div>
+      <div class="hint">Nada aqui é salvo até você clicar em Salvar no rodapé. Cancelar descarta tudo, inclusive pontes/check-ins removidos por engano.</div>
+    </div>
+    <div class="sec">
+      <div class="sech"><h3>Pontes de contato</h3><span class="pill" id="ptCount">0</span></div>
+      <div id="ptList"></div>
+      <div class="row2"><input id="ptTitulo" placeholder="Título (ex: D+7 fechamento semana)"><input id="ptData" type="date"></div>
+      <div class="gap"></div>
+      <textarea id="ptMsg" style="height:52px" placeholder="Mensagem sugerida"></textarea>
+      <div class="gap"></div>
+      <div class="row2"><input id="ptTom" placeholder="Tom"><select id="ptGrau"><option value="1">Grau 1</option><option value="2">Grau 2</option><option value="3">Grau 3</option><option value="4">Grau 4</option></select></div>
+      <div class="gap"></div>
+      <button class="btn r" id="btnAddPt" style="width:100%">+ Adicionar ponte</button>
+      <div class="jsonbox"><label>Importar JSON de pontes</label><textarea id="ptJson" placeholder='[{"titulo":"...","data":"2026-07-20","msg":"...","tom":"...","grau":2}]'></textarea>
+      <div class="gap"></div><button class="btn bl" id="btnImpPt" style="width:100%">Importar pontes</button></div>
+    </div>
+    <div class="sec">
+      <div class="sech"><h3>Check-ins</h3><span class="pill" id="ckCount">0</span></div>
+      <div id="ckList"></div>
+      <div class="row2"><input id="ckTitulo" placeholder="Título do check-in"><input id="ckData" type="date"></div>
+      <div class="gap"></div>
+      <button class="btn r" id="btnAddCk" style="width:100%">+ Adicionar check-in</button>
+      <div class="jsonbox"><label>Importar JSON de check-ins</label><textarea id="ckJson" placeholder='[{"titulo":"...","data":"2026-07-20"}]'></textarea>
+      <div class="gap"></div><button class="btn bl" id="btnImpCk" style="width:100%">Importar check-ins</button></div>
+    </div>
+    <div class="sec">
+      <div class="sech"><h3>Histórico de contato</h3></div>
+      <div id="histList"></div>
+      <div class="row2"><input id="hData" type="date"><select id="hTipo"><option>WhatsApp</option><option>Áudio</option><option>Ligação</option><option>Presencial</option></select></div>
+      <div class="gap"></div>
+      <textarea id="hTxt" style="height:48px" placeholder="O que foi tratado"></textarea>
+      <div class="gap"></div>
+      <button class="btn r" id="btnSalvH" style="width:100%">Registrar contato</button>
+    </div>
+    <div class="sec"><button class="btn d" id="btnRem" style="width:100%">Remover aluna</button></div>
+  </div>
+  <div class="dfoot"><button class="btn g" id="btnCF">Cancelar</button><button class="btn r" id="btnSave">Salvar</button></div>
+</div>
+
+<div class="covwrap" id="cov"><div class="covbox"><p id="covMsg"></p><div class="covbtns"><button class="btn g" id="btnCC">Cancelar</button><button class="btn d" id="btnCO">Remover</button></div></div></div>
+<div class="toast" id="toast"></div>
+</div>
+
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-auth.js";
+import { getFirestore, doc, getDoc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/10.12.3/firebase-firestore.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCBXzZgcgkEh6fEZyidXefepEwpu4Odg2k",
+  authDomain: "cs-garimpo.firebaseapp.com",
+  projectId: "cs-garimpo",
+  storageBucket: "cs-garimpo.firebasestorage.app",
+  messagingSenderId: "870090104864",
+  appId: "1:870090104864:web:a169b0056da9e5aef55c45"
+};
+const fbApp=initializeApp(firebaseConfig);
+const auth=getAuth(fbApp);
+const dbFS=getFirestore(fbApp);
+const docRef=doc(dbFS,'garimpo_cs_v4','main');
+let unsub=null;
+
+const $=id=>document.getElementById(id);
+$('btnLogin').addEventListener('click',doLogin);
+$('loSenha').addEventListener('keydown',e=>{if(e.key==='Enter')doLogin()});
+function doLogin(){
+  const email=$('loEmail').value.trim(),senha=$('loSenha').value;
+  $('loginErr').style.display='none';
+  signInWithEmailAndPassword(auth,email,senha).catch(e=>{$('loginErr').textContent='E-mail ou senha incorretos.';$('loginErr').style.display='block'});
+}
+$('btnLogout').addEventListener('click',()=>{if(unsub)unsub();signOut(auth)});
+onAuthStateChanged(auth,user=>{
+  $('loadwrap').style.display='none';
+  if(user){
+    $('loginwrap').style.display='none';$('appHeader').style.display='flex';$('appBody').style.display='block';
+    startSync();
+  }else{
+    $('appHeader').style.display='none';$('appBody').style.display='none';$('loginwrap').style.display='flex';
+    if(unsub){unsub();unsub=null}
+  }
+});
+function startSync(){
+  unsub=onSnapshot(docRef,snap=>{
+    AA=snap.exists()&&snap.data().json?JSON.parse(snap.data().json):[];
+    let migrou=false;
+    AA.forEach(a=>(a.pontes||[]).forEach(p=>{
+      if(p.statusEnvio==='enviada'||p.statusEnvio==='respondida'){p.statusEnvio='resposta_pendente';if(!p.dataEnvio){p.dataEnvio=today();migrou=true}}
+      if(!p.statusEnvio){p.statusEnvio='pendente';migrou=true}
+    }));
+    AA.forEach(a=>(a.checkins||[]).forEach(c=>{if(c.cadastrado===undefined){c.cadastrado=true;migrou=true}}));
+    if(migrou)sv();
+    renderDash();renderAlu();renderRep();
+  },err=>toast('Erro de sincronização: '+err.message,'#7a1f1f'));
+}
+async function sv(){try{await setDoc(docRef,{json:JSON.stringify(AA)})}catch(e){toast('Erro ao salvar','#7a1f1f')}}
+
+let AA=[],CID=null,DRAFT=null,ST='',SCOL='venc',SDIR=1,RID=null;
+const today=()=>new Date().toISOString().slice(0,10);
+const uid=()=>'a'+Date.now()+Math.floor(Math.random()*9999);
+function toast(msg,color){const t=$('toast');t.textContent=msg;t.style.borderColor=color||'#333';t.style.display='block';clearTimeout(window._tt);window._tt=setTimeout(()=>t.style.display='none',2400)}
+function copyText(text,ta){
+  let ok=false;
+  if(ta){ta.focus();ta.select();try{ok=document.execCommand('copy')}catch(e){}}
+  if(ok){toast('Mensagem copiada ✓');return}
+  if(navigator.clipboard&&navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text).then(()=>toast('Mensagem copiada ✓')).catch(()=>toast('Não copiou sozinho. Texto selecionado, use Ctrl+C.','#7a1f1f'));
+  }else{toast('Não copiou sozinho. Texto selecionado, use Ctrl+C.','#7a1f1f')}
+}
+
+// (dados carregados via startSync/onSnapshot, ver acima)
+
+function cicloDe(a){if(a.cicloOv)return a.cicloOv;if(!a.dataIni)return 1;const dias=Math.floor((new Date()-new Date(a.dataIni))/86400000);return Math.max(1,Math.floor(dias/30)+1)}
+function diasParaVenc(a){if(!a.dataVenc)return null;return Math.floor((new Date(a.dataVenc)-new Date())/86400000)}
+function diasDesde(d){if(!d)return 0;return Math.floor((new Date()-new Date(d))/86400000)}
+function ckStatus(c){if(c.status==='concluido')return'concluido';if(c.status==='respondido')return'respondido';if(!c.cadastrado)return'nao_cadastrado';const d=Math.floor((new Date()-new Date(c.data))/86400000);if(d===0)return'prazo_hoje';if(d>0)return'vencido';return'pendente'}
+function vencidosCount(a){return(a.checkins||[]).filter(c=>ckStatus(c)==='vencido').length}
+function janelaRenov(a){return(a.plano||'').toLowerCase().startsWith('mensal')?7:30}
+function ptFup(p){return p.statusEnvio==='resposta_pendente'&&diasDesde(p.dataEnvio)>=2}
+function ptAguardando(p){return p.statusEnvio==='resposta_pendente'&&diasDesde(p.dataEnvio)<2}
+function ptAtrasada(p){return(p.statusEnvio==='pendente'||!p.statusEnvio)&&diasDesde(p.data)>0}
+function ultimoContato(a){
+  let datas=[];
+  (a.pontes||[]).forEach(p=>{if(p.dataEnvio)datas.push(p.dataEnvio)});
+  (a.hist||[]).forEach(h=>{if(h.data)datas.push(h.data)});
+  if(!datas.length)return null;
+  return datas.sort().slice(-1)[0];
+}
+
+function statusAluna(a){
+  const cks=(a.checkins||[]).map(ckStatus),pts=a.pontes||[];
+  if(cks.includes('nao_cadastrado'))return{lbl:'Falta cadastrar no app',cls:'b-amber'};
+  if(pts.some(ptAtrasada))return{lbl:'Ponte não enviada',cls:'b-red'};
+  if(cks.includes('vencido'))return{lbl:'Vencido',cls:'b-red'};
+  if(pts.some(ptFup))return{lbl:'FUP necessário',cls:'b-red'};
+  if(cks.includes('respondido'))return{lbl:'Aguard. análise',cls:'b-amber'};
+  if(pts.some(p=>p.statusAprovacao==='pendente'))return{lbl:'Aguard. aprovação',cls:'b-amber'};
+  if(cks.includes('prazo_hoje'))return{lbl:'Prazo hoje',cls:'b-amber'};
+  const dv=diasParaVenc(a);
+  if(dv!==null&&dv<=janelaRenov(a)&&dv>=0)return{lbl:'Janela renovação',cls:'b-amber'};
+  if(dv!==null&&dv<0)return{lbl:'Plano vencido',cls:'b-red'};
+  return{lbl:'Em dia',cls:'b-ok'};
+}
+function acaoPendente(a){
+  const cks=a.checkins||[],pts=a.pontes||[];
+  const naoCad=cks.find(c=>ckStatus(c)==='nao_cadastrado');
+  if(naoCad){const d=diasDesde(naoCad.data);return`Cadastrar no app: "${naoCad.titulo}"${d>0?` (atrasado ${d}d)`:` (${naoCad.data})`}`;}
+  const atrasada=pts.find(ptAtrasada);if(atrasada)return`Ponte não enviada: "${atrasada.titulo}" (atrasada ${diasDesde(atrasada.data)}d)`;
+  const venc=cks.find(c=>ckStatus(c)==='vencido');if(venc)return`Check-in vencido: "${venc.titulo}" (há ${diasDesde(venc.data)}d) — registrar motivo`;
+  const fup=pts.find(ptFup);if(fup)return`FUP necessário: ponte "${fup.titulo}" enviada há ${diasDesde(fup.dataEnvio)}d sem resposta`;
+  const resp=cks.find(c=>ckStatus(c)==='respondido');if(resp)return`Analisar resposta: "${resp.titulo}"`;
+  const aprov=pts.find(p=>p.statusAprovacao==='pendente');if(aprov)return`Ponte aguardando aprovação: "${aprov.titulo}"`;
+  const hoje=cks.find(c=>ckStatus(c)==='prazo_hoje');if(hoje)return`Check-in com prazo hoje: "${hoje.titulo}"`;
+  const dv=diasParaVenc(a);
+  if(dv!==null&&dv<=janelaRenov(a)&&dv>=0)return`Renovação: janela aberta (vence em ${dv}d)`;
+  return'—';
+}
+function proximaPonteInfo(a){
+  const pts=a.pontes||[];
+  const atrasada=pts.find(ptAtrasada);if(atrasada)return{lbl:`Não enviada · ${atrasada.titulo} (${diasDesde(atrasada.data)}d)`,data:atrasada.data,cls:'b-red'};
+  const fup=pts.find(ptFup);if(fup)return{lbl:`FUP · ${fup.titulo} (${diasDesde(fup.dataEnvio)}d)`,data:fup.dataEnvio,cls:'b-red'};
+  const ag=pts.find(ptAguardando);if(ag)return{lbl:`Aguard. resp. · ${ag.titulo} (${diasDesde(ag.dataEnvio)}d)`,data:ag.dataEnvio,cls:'b-amber'};
+  const pend=pts.filter(p=>p.statusEnvio==='pendente').sort((x,y)=>(x.data>y.data?1:-1))[0];
+  if(pend)return{lbl:`Enviar · ${pend.titulo}`,data:pend.data,cls:'b-grey'};
+  return{lbl:'—',data:'',cls:'b-grey'};
+}
+
+// ---------- DASHBOARD ----------
+function renderDash(){
+  let aVencer=[],vencidos=[],aguardando=0;
+  AA.forEach(a=>{
+    (a.checkins||[]).forEach(c=>{
+      const s=ckStatus(c);
+      if(s==='nao_cadastrado'){
+        const d=diasDesde(c.data);
+        if(d>0)vencidos.push({id:a.id,nome:a.nome,det:`Cadastrar no app (atrasado ${d}d): "${c.titulo}"`});
+        else if(d>=-7)aVencer.push({id:a.id,nome:a.nome,det:`Cadastrar no app: "${c.titulo}" (${c.data})`});
+      }
+      if(s==='vencido')vencidos.push({id:a.id,nome:a.nome,det:`Check-in "${c.titulo}" vencido há ${diasDesde(c.data)}d`});
+      if(s==='prazo_hoje')aVencer.push({id:a.id,nome:a.nome,det:`Check-in "${c.titulo}" com prazo hoje`});
+      if(s==='respondido'){aguardando++;aVencer.push({id:a.id,nome:a.nome,det:`Aguardando análise: "${c.titulo}"`});}
+    });
+    (a.pontes||[]).forEach(p=>{
+      if(ptFup(p))vencidos.push({id:a.id,nome:a.nome,det:`FUP: ponte "${p.titulo}" enviada há ${diasDesde(p.dataEnvio)}d sem resposta`});
+      else if(ptAguardando(p))aVencer.push({id:a.id,nome:a.nome,det:`Aguardando resposta: ponte "${p.titulo}" (${diasDesde(p.dataEnvio)}d)`});
+      if(ptAtrasada(p))vencidos.push({id:a.id,nome:a.nome,det:`Ponte "${p.titulo}" não enviada (atrasada ${diasDesde(p.data)}d)`});
+      if(p.statusAprovacao==='pendente'&&diasDesde(p.data)>=-7)aVencer.push({id:a.id,nome:a.nome,det:`Ponte aguardando aprovação: "${p.titulo}"`});
+    });
+    const dv=diasParaVenc(a),janela=janelaRenov(a);
+    if(dv!==null&&dv<0)vencidos.push({id:a.id,nome:a.nome,det:`Plano venceu há ${Math.abs(dv)}d`});
+    else if(dv!==null&&dv<=janela)aVencer.push({id:a.id,nome:a.nome,det:`Janela de renovação: vence em ${dv}d`});
+  });
+  $('cards').innerHTML=`<div class="card"><div class="card-val">${AA.length}</div><div class="card-lbl">Total de alunas</div></div>
+    <div class="card card-amber"><div class="card-val">${aVencer.length}</div><div class="card-lbl">A vencer / atenção</div></div>
+    <div class="card card-red"><div class="card-val">${vencidos.length}</div><div class="card-lbl">Vencidos / FUP</div></div>
+    <div class="card card-green"><div class="card-val">${aguardando}</div><div class="card-lbl">Aguardando análise</div></div>`;
+  $('avCount').textContent=aVencer.length;
+  $('avList').innerHTML=aVencer.length?aVencer.map(i=>`<div class="prow" data-abrir="${i.id}"><div class="dot amber"></div><div><div class="pnome">${i.nome}</div><div class="pdet">${i.det}</div></div></div>`).join(''):'<div class="pempty">Nada pendente por aqui 💎</div>';
+  $('vcCount').textContent=vencidos.length;
+  $('vcList').innerHTML=vencidos.length?vencidos.map(i=>`<div class="prow" data-abrir="${i.id}"><div class="dot red"></div><div><div class="pnome">${i.nome}</div><div class="pdet">${i.det}</div></div></div>`).join(''):'<div class="pempty">Nenhum item vencido 🔥</div>';
+  document.querySelectorAll('[data-abrir]').forEach(el=>el.addEventListener('click',()=>openDrw(el.dataset.abrir)));
+}
+
+// ---------- RELATÓRIOS ----------
+function renderRep(){
+  let totalCk=0,respCk=0;
+  AA.forEach(a=>(a.checkins||[]).forEach(c=>{totalCk++;if(c.status==='respondido'||c.status==='concluido')respCk++}));
+  $('repTaxa').textContent=totalCk?Math.round(respCk/totalCk*100)+'%':'—';
+  let totalPt=0,envPt=0,concPt=0,fupPt=0;
+  AA.forEach(a=>(a.pontes||[]).forEach(p=>{totalPt++;if(p.statusEnvio==='resposta_pendente'||p.statusEnvio==='concluida')envPt++;if(p.statusEnvio==='concluida')concPt++;if(ptFup(p))fupPt++}));
+  $('repPontes').textContent=`${envPt} enviadas / ${concPt} concluídas de ${totalPt}`;
+  $('repFup').textContent=fupPt;
+  let atrasadasPt=0;
+  AA.forEach(a=>(a.pontes||[]).forEach(p=>{if(ptAtrasada(p))atrasadasPt++}));
+  $('repAtrasadas').textContent=atrasadasPt;
+  let totalNaoCad=0;
+  AA.forEach(a=>(a.checkins||[]).forEach(c=>{if(ckStatus(c)==='nao_cadastrado')totalNaoCad++}));
+  $('repNaoCad').textContent=totalNaoCad;
+  let itens=[];
+  AA.forEach(a=>{
+    (a.checkins||[]).forEach(c=>{
+      if(ckStatus(c)==='vencido')itens.push({id:a.id,nome:a.nome,det:`Check-in "${c.titulo}"`,d:diasDesde(c.data)});
+      if(ckStatus(c)==='nao_cadastrado'&&diasDesde(c.data)>0)itens.push({id:a.id,nome:a.nome,det:`Check-in "${c.titulo}" (nunca cadastrado no app)`,d:diasDesde(c.data)});
+    });
+    (a.pontes||[]).forEach(p=>{
+      if(ptFup(p))itens.push({id:a.id,nome:a.nome,det:`Ponte "${p.titulo}" (FUP)`,d:diasDesde(p.dataEnvio)});
+      if(ptAtrasada(p))itens.push({id:a.id,nome:a.nome,det:`Ponte "${p.titulo}" (não enviada)`,d:diasDesde(p.data)});
+    });
+  });
+  itens.sort((x,y)=>y.d-x.d);
+  $('repTotalVenc').textContent=itens.length;
+  $('repVenc').innerHTML=itens.length?itens.map(v=>`<div class="prow" data-abrir="${v.id}"><div class="dot red"></div><div><div class="pnome">${v.nome}</div><div class="pdet">${v.det} · vencido há ${v.d}d</div></div></div>`).join(''):'<div class="pempty">Nenhum item vencido 🔥</div>';
+  $('repVenc').querySelectorAll('[data-abrir]').forEach(el=>el.addEventListener('click',()=>openDrw(el.dataset.abrir)));
+  const planos={};
+  AA.forEach(a=>{const k=a.plano||'—';planos[k]=(planos[k]||0)+1});
+  const pk=Object.keys(planos),maxP=Math.max(1,...Object.values(planos));
+  $('repPlanos').innerHTML=pk.length?pk.map(k=>`<div class="rrow"><span style="width:150px">${k}</span><div class="bar-wrap"><div class="bar" style="width:${planos[k]/maxP*100}%"></div></div><span class="rv">${planos[k]}</span></div>`).join(''):'<div class="pempty">Nenhuma aluna cadastrada</div>';
+  const motCount={};
+  AA.forEach(a=>(a.checkins||[]).forEach(c=>{if(ckStatus(c)==='vencido'&&c.motivo?.cat)motCount[c.motivo.cat]=(motCount[c.motivo.cat]||0)+1}));
+  const mk=Object.keys(motCount),maxM=Math.max(1,...Object.values(motCount));
+  $('repMotivos').innerHTML=mk.length?mk.map(k=>`<div class="rrow"><span style="text-transform:capitalize;width:140px">${k}</span><div class="bar-wrap"><div class="bar" style="width:${motCount[k]/maxM*100}%"></div></div><span class="rv">${motCount[k]}</span></div>`).join(''):'<div class="pempty">Nenhum motivo registrado ainda</div>';
+  const motPtCount={};
+  AA.forEach(a=>(a.pontes||[]).forEach(p=>{if(ptAtrasada(p)&&p.motivoAtraso?.cat)motPtCount[p.motivoAtraso.cat]=(motPtCount[p.motivoAtraso.cat]||0)+1}));
+  const mpk=Object.keys(motPtCount),maxMP=Math.max(1,...Object.values(motPtCount));
+  $('repMotivosPt').innerHTML=mpk.length?mpk.map(k=>`<div class="rrow"><span style="text-transform:capitalize;width:170px">${k}</span><div class="bar-wrap"><div class="bar" style="width:${motPtCount[k]/maxMP*100}%"></div></div><span class="rv">${motPtCount[k]}</span></div>`).join(''):'<div class="pempty">Nenhum motivo registrado ainda</div>';
+  const churn=AA.map(a=>({nome:a.nome,n:vencidosCount(a)})).filter(x=>x.n>=3).sort((x,y)=>y.n-x.n);
+  $('repChurn').innerHTML=churn.length?churn.map(c=>`<div class="churn"><span class="cn">${c.nome}</span><span class="cflag">${c.n} vencidos</span></div>`).join(''):'<div class="pempty">Nenhuma aluna em risco de churn 💎</div>';
+  const funil={'Pendente (não enviada)':0,'Aguardando resposta':0,'Concluída':0};
+  AA.forEach(a=>(a.pontes||[]).forEach(p=>{
+    if(p.statusEnvio==='concluida')funil['Concluída']++;
+    else if(p.statusEnvio==='resposta_pendente')funil['Aguardando resposta']++;
+    else funil['Pendente (não enviada)']++;
+  }));
+  const fk=Object.keys(funil),maxF=Math.max(1,...Object.values(funil));
+  $('repFunil').innerHTML=fk.map(k=>`<div class="rrow"><span style="width:170px">${k}</span><div class="bar-wrap"><div class="bar" style="width:${funil[k]/maxF*100}%"></div></div><span class="rv">${funil[k]}</span></div>`).join('');
+  const semContato=AA.map(a=>{const uc=ultimoContato(a);const d=uc?diasDesde(uc):(a.dataIni?diasDesde(a.dataIni):null);return{id:a.id,nome:a.nome,d,uc};}).filter(x=>x.d!==null&&x.d>=10).sort((x,y)=>y.d-x.d);
+  $('repSemContato').innerHTML=semContato.length?semContato.map(x=>`<div class="prow" data-abrir="${x.id}"><div class="dot amber"></div><div><div class="pnome">${x.nome}</div><div class="pdet">${x.uc?`Último contato em ${x.uc}`:'Sem nenhum contato registrado desde o início do ciclo'} · ${x.d}d</div></div></div>`).join(''):'<div class="pempty">Todo mundo com contato recente 💎</div>';
+  $('repSemContato').querySelectorAll('[data-abrir]').forEach(el=>el.addEventListener('click',()=>openDrw(el.dataset.abrir)));
+}
+
+// ---------- ALUNAS (tabela) ----------
+function renderAlu(){
+  let list=AA.filter(a=>a.nome.toLowerCase().includes(ST.toLowerCase()));
+  list.sort((x,y)=>{
+    let vx,vy;
+    if(SCOL==='nome'){vx=x.nome;vy=y.nome}
+    else if(SCOL==='ciclo'){vx=cicloDe(x);vy=cicloDe(y)}
+    else if(SCOL==='plano'){vx=x.plano;vy=y.plano}
+    else if(SCOL==='status'){vx=statusAluna(x).lbl;vy=statusAluna(y).lbl}
+    else if(SCOL==='acao'){vx=acaoPendente(x);vy=acaoPendente(y)}
+    else if(SCOL==='ponte'){vx=proximaPonteInfo(x).data||'';vy=proximaPonteInfo(y).data||''}
+    else{vx=x.dataVenc||'';vy=y.dataVenc||''}
+    return(vx>vy?1:vx<vy?-1:0)*SDIR;
+  });
+  $('empty').style.display=list.length?'none':'block';
+  $('tbody').innerHTML=list.map(a=>{
+    const st=statusAluna(a),pp=proximaPonteInfo(a);
+    return`<tr class="rw" data-id="${a.id}"><td><strong>${a.nome}</strong></td><td>Ciclo ${cicloDe(a)}</td><td>${a.plano}</td><td><span class="badge ${st.cls}">${st.lbl}</span></td><td style="white-space:normal;max-width:230px">${acaoPendente(a)}</td><td><span class="badge ${pp.cls}">${pp.lbl}</span>${pp.data?`<div class="hint">${pp.data}</div>`:''}</td><td>${a.dataVenc||'—'}</td></tr>`;
+  }).join('');
+  document.querySelectorAll('.rw').forEach(tr=>tr.addEventListener('click',()=>openDrw(tr.dataset.id)));
+}
+
+// ---------- DRAWER (rascunho) ----------
+function openDrw(id){
+  CID=id;
+  const orig=id?AA.find(x=>String(x.id)===String(id)):null;
+  DRAFT=orig?JSON.parse(JSON.stringify(orig)):{id:uid(),checkins:[],pontes:[],hist:[]};
+  if(orig){
+    $('dhNome').textContent=DRAFT.nome;$('dhSub').textContent=`Ciclo ${cicloDe(DRAFT)} · ${DRAFT.plano}`;
+    $('fNome').value=DRAFT.nome;$('fPlano').value=DRAFT.plano;$('fCicloOv').value=DRAFT.cicloOv||'';
+    $('fIni').value=DRAFT.dataIni||'';$('fVenc').value=DRAFT.dataVenc||'';$('fLink').value=DRAFT.link||'';$('fOver').value=DRAFT.overdelivery||'';
+    const ap=acaoPendente(DRAFT);$('acaoBox').style.display=ap!=='—'?'block':'none';$('acaoTxt').textContent=ap;
+    if(DRAFT.link){$('btnAbrirChat').href=DRAFT.link;$('btnAbrirChat').style.display='inline-flex'}else{$('btnAbrirChat').style.display='none'}
+    $('btnRem').style.display='block';
+  }else{
+    $('dhNome').textContent='Nova aluna';$('dhSub').textContent='Preencha o cadastro';
+    ['fNome','fCicloOv','fIni','fVenc','fLink','fOver'].forEach(id2=>$(id2).value='');
+    $('fPlano').value='Mensal';$('acaoBox').style.display='none';$('btnRem').style.display='none';$('btnAbrirChat').style.display='none';
+  }
+  $('ptJson').value='';$('ckJson').value='';
+  rPt(DRAFT.pontes);rCk(DRAFT.checkins);rHist(DRAFT.hist);
+  $('ov').classList.add('on');$('drw').classList.add('on');
+}
+function closeDrw(){$('ov').classList.remove('on');$('drw').classList.remove('on');CID=null;DRAFT=null}
+
+function rPt(list){
+  $('ptCount').textContent=list.length;
+  if(!list.length){$('ptList').innerHTML='<div style="color:#555;font-size:11px">Nenhuma ponte cadastrada</div>';return}
+  $('ptList').innerHTML=list.map((p,i)=>`<div class="item"><div class="itop"><span class="ititle">${p.titulo}</span><span class="idate">${p.data} · Grau ${p.grau||1}</span></div>
+    ${p.tom?`<div style="font-size:10.5px;color:#888">Tom: ${p.tom}</div>`:''}
+    <textarea data-ptmsg="${i}" style="margin-top:6px;font-size:11.5px">${p.msg||''}</textarea>
+    <div class="statrow"><span class="sbtn ${p.statusAprovacao==='aprovada'?'on':''}" data-ptap="${i}">${p.statusAprovacao==='aprovada'?'✓ Aprovada':'Aguard. aprovação'}</span>
+    <span class="sbtn ${p.statusEnvio==='resposta_pendente'?'on':''}" data-ptenv="${i}" data-val="resposta_pendente">${p.statusEnvio==='resposta_pendente'?`✓ Enviada (${diasDesde(p.dataEnvio)}d)`:'Marcar enviada'}</span>
+    <span class="sbtn ${p.statusEnvio==='concluida'?'on':''}" data-ptenv="${i}" data-val="concluida">${p.statusEnvio==='concluida'?'✓ Concluída':'Concluída'}</span></div>
+    ${ptFup(p)?`<div class="fup">⚠ FUP necessário — enviada há ${diasDesde(p.dataEnvio)}d sem resposta</div>`:''}
+    ${ptAtrasada(p)?`<div class="fup">⚠ Não enviada — data prevista era ${p.data} (${diasDesde(p.data)}d atrás)</div>
+    <div class="motivo">
+      <label>Motivo do atraso</label>
+      <select data-ptmotcat="${i}">
+        <option value="">Selecione...</option>
+        <option value="esquecimento da equipe" ${p.motivoAtraso?.cat==='esquecimento da equipe'?'selected':''}>Esquecimento da equipe</option>
+        <option value="sobrecarga de atendimentos" ${p.motivoAtraso?.cat==='sobrecarga de atendimentos'?'selected':''}>Sobrecarga de atendimentos</option>
+        <option value="aprovação atrasada" ${p.motivoAtraso?.cat==='aprovação atrasada'?'selected':''}>Aprovação atrasada (Yuri)</option>
+        <option value="problema técnico" ${p.motivoAtraso?.cat==='problema técnico'?'selected':''}>Problema técnico</option>
+        <option value="prioridade em outro caso" ${p.motivoAtraso?.cat==='prioridade em outro caso'?'selected':''}>Prioridade em outro caso crítico</option>
+        <option value="não identificado" ${p.motivoAtraso?.cat==='não identificado'?'selected':''}>Não identificado</option>
+      </select>
+      <div class="gap"></div>
+      <input data-ptmotdet="${i}" placeholder="Detalhe (opcional)" value="${p.motivoAtraso?.det||''}">
+    </div>`:''}
+    <div class="iactions"><button class="btn bl" data-ptcopy="${i}">Copiar</button><button class="btn d" data-ptdel="${i}">Remover</button></div></div>`).join('');
+  $('ptList').querySelectorAll('[data-ptap]').forEach(b=>b.addEventListener('click',()=>{const p=DRAFT.pontes[+b.dataset.ptap];p.statusAprovacao=p.statusAprovacao==='aprovada'?'pendente':'aprovada';rPt(DRAFT.pontes)}));
+  $('ptList').querySelectorAll('[data-ptenv]').forEach(b=>b.addEventListener('click',()=>{
+    const p=DRAFT.pontes[+b.dataset.ptenv],val=b.dataset.val;
+    if(p.statusEnvio===val){
+      if(val==='resposta_pendente'){p.statusEnvio='pendente';p.dataEnvio=null}
+      else if(val==='concluida'){p.statusEnvio=p.dataEnvio?'resposta_pendente':'pendente'}
+    }else{p.statusEnvio=val;if(val==='resposta_pendente')p.dataEnvio=today()}
+    rPt(DRAFT.pontes);
+  }));
+  $('ptList').querySelectorAll('[data-ptmsg]').forEach(t=>t.addEventListener('change',()=>{DRAFT.pontes[+t.dataset.ptmsg].msg=t.value}));
+  $('ptList').querySelectorAll('[data-ptcopy]').forEach(b=>{
+    b.addEventListener('click',()=>{const i=b.dataset.ptcopy;const ta=document.querySelector(`textarea[data-ptmsg="${i}"]`);copyText(DRAFT.pontes[+i].msg||'',ta)});
+  });
+  $('ptList').querySelectorAll('[data-ptdel]').forEach(b=>b.addEventListener('click',()=>{DRAFT.pontes.splice(+b.dataset.ptdel,1);rPt(DRAFT.pontes)}));
+  $('ptList').querySelectorAll('[data-ptmotcat]').forEach(s=>s.addEventListener('change',()=>{const p=DRAFT.pontes[+s.dataset.ptmotcat];p.motivoAtraso=p.motivoAtraso||{};p.motivoAtraso.cat=s.value}));
+  $('ptList').querySelectorAll('[data-ptmotdet]').forEach(inp=>inp.addEventListener('change',()=>{const p=DRAFT.pontes[+inp.dataset.ptmotdet];p.motivoAtraso=p.motivoAtraso||{};p.motivoAtraso.det=inp.value}));
+}
+function rCk(list){
+  $('ckCount').textContent=list.length;
+  if(!list.length){$('ckList').innerHTML='<div style="color:#555;font-size:11px">Nenhum check-in cadastrado</div>';return}
+  const lbl={nao_cadastrado:'Pendente cadastro no app',pendente:'Pendente',prazo_hoje:'Prazo hoje',vencido:'Vencido',respondido:'Aguard. análise',concluido:'Concluído'};
+  const cls={nao_cadastrado:'b-amber',pendente:'b-grey',prazo_hoje:'b-amber',vencido:'b-red',respondido:'b-amber',concluido:'b-ok'};
+  $('ckList').innerHTML=list.map((c,i)=>{const s=ckStatus(c);return`<div class="item"><div class="itop"><span class="ititle">${c.titulo}</span><span class="idate">${c.data}</span></div><span class="badge ${cls[s]}">${lbl[s]}</span>
+    ${s==='vencido'?`<div class="motivo"><label>Motivo do vencimento</label><select data-motcat="${i}"><option value="">Selecione...</option>
+    <option value="sumiço" ${c.motivo?.cat==='sumiço'?'selected':''}>Sumiço</option><option value="problema técnico" ${c.motivo?.cat==='problema técnico'?'selected':''}>Problema técnico</option>
+    <option value="situação pessoal" ${c.motivo?.cat==='situação pessoal'?'selected':''}>Situação pessoal</option><option value="esquecimento" ${c.motivo?.cat==='esquecimento'?'selected':''}>Esquecimento</option>
+    <option value="não identificado" ${c.motivo?.cat==='não identificado'?'selected':''}>Não identificado</option></select><div class="gap"></div>
+    <input data-motdet="${i}" placeholder="Detalhe (opcional)" value="${c.motivo?.det||''}"></div>`:''}
+    <div class="statrow">
+      <span class="sbtn ${c.cadastrado?'on':''}" data-ckcad="${i}">${c.cadastrado?'✓ Cadastrado no app':'Cadastrado no app'}</span>
+      <span class="sbtn ${c.status==='respondido'?'on':''}" data-ckresp="${i}">${c.status==='respondido'?'✓ Respondido':'Respondido'}</span>
+      <span class="sbtn ${c.status==='concluido'?'on':''}" data-ckconc="${i}">${c.status==='concluido'?'✓ Analisado':'Analisado'}</span>
+    </div>
+    <div class="iactions"><button class="btn d" data-ckdel="${i}">Remover</button></div></div>`}).join('');
+  $('ckList').querySelectorAll('[data-ckcad]').forEach(b=>b.addEventListener('click',()=>{
+    const c=DRAFT.checkins[+b.dataset.ckcad];
+    if(c.cadastrado){c.cadastrado=false;c.status=undefined}else{c.cadastrado=true}
+    rCk(DRAFT.checkins);
+  }));
+  $('ckList').querySelectorAll('[data-ckresp]').forEach(b=>b.addEventListener('click',()=>{
+    const c=DRAFT.checkins[+b.dataset.ckresp];
+    if(c.status==='respondido'){c.status=undefined}else{c.status='respondido';c.cadastrado=true}
+    rCk(DRAFT.checkins);
+  }));
+  $('ckList').querySelectorAll('[data-ckconc]').forEach(b=>b.addEventListener('click',()=>{
+    const c=DRAFT.checkins[+b.dataset.ckconc];
+    if(c.status==='concluido'){c.status='respondido'}else{c.status='concluido';c.cadastrado=true}
+    rCk(DRAFT.checkins);
+  }));
+  $('ckList').querySelectorAll('[data-ckdel]').forEach(b=>b.addEventListener('click',()=>{DRAFT.checkins.splice(+b.dataset.ckdel,1);rCk(DRAFT.checkins)}));
+  $('ckList').querySelectorAll('[data-motcat]').forEach(s=>s.addEventListener('change',()=>{const c=DRAFT.checkins[+s.dataset.motcat];c.motivo=c.motivo||{};c.motivo.cat=s.value}));
+  $('ckList').querySelectorAll('[data-motdet]').forEach(inp=>inp.addEventListener('change',()=>{const c=DRAFT.checkins[+inp.dataset.motdet];c.motivo=c.motivo||{};c.motivo.det=inp.value}));
+}
+function rHist(list){
+  if(!list.length){$('histList').innerHTML='<div style="color:#555;font-size:11px">Nenhum contato registrado</div>';return}
+  $('histList').innerHTML=[...list].reverse().map((h,ri)=>{const i=list.length-1-ri;return`<div class="hrow"><div class="hmeta">${h.data}<br>${h.tipo}</div><div class="htxt">${h.txt}</div><button class="ix" data-hdel="${i}">✕</button></div>`}).join('');
+  $('histList').querySelectorAll('[data-hdel]').forEach(b=>b.addEventListener('click',()=>{DRAFT.hist.splice(+b.dataset.hdel,1);rHist(DRAFT.hist)}));
+}
+function saveDrw(){
+  const nome=$('fNome').value.trim();if(!nome){toast('Preencha o nome','#7a1f1f');return}
+  DRAFT.nome=nome;DRAFT.plano=$('fPlano').value;DRAFT.cicloOv=$('fCicloOv').value?+$('fCicloOv').value:null;
+  DRAFT.dataIni=$('fIni').value;DRAFT.dataVenc=$('fVenc').value;DRAFT.link=$('fLink').value.trim();DRAFT.overdelivery=$('fOver').value.trim();
+  let msg=`${nome} salva ✓`;
+  const ckj=$('ckJson').value.trim();
+  if(ckj){try{const arr=JSON.parse(ckj);let n=0;arr.forEach(it=>{if(!DRAFT.checkins.some(c=>c.titulo===it.titulo)){DRAFT.checkins.push({id:uid(),titulo:it.titulo,data:it.data,status:'pendente',cadastrado:false});n++}});if(n)msg+=` · ${n} check-in(s) importado(s)`}catch(e){toast('JSON de check-ins inválido','#7a1f1f');return}}
+  const ptj=$('ptJson').value.trim();
+  if(ptj){try{const arr=JSON.parse(ptj);let n=0;arr.forEach(it=>{if(!DRAFT.pontes.some(p=>p.titulo===it.titulo)){DRAFT.pontes.push({id:uid(),titulo:it.titulo,data:it.data,msg:it.msg||'',tom:it.tom||'',grau:it.grau||1,statusAprovacao:'pendente',statusEnvio:'pendente'});n++}});if(n)msg+=` · ${n} ponte(s) importada(s)`}catch(e){toast('JSON de pontes inválido','#7a1f1f');return}}
+  const idx=AA.findIndex(x=>String(x.id)===String(DRAFT.id));
+  if(idx>=0)AA[idx]=DRAFT;else AA.push(DRAFT);
+  sv();renderAlu();renderDash();renderRep();closeDrw();toast(msg);
+}
+$('btnAddPt').addEventListener('click',()=>{
+  const titulo=$('ptTitulo').value.trim();if(!titulo){toast('Dê um título à ponte','#7a1f1f');return}
+  DRAFT.pontes.push({id:uid(),titulo,data:$('ptData').value||today(),msg:$('ptMsg').value,tom:$('ptTom').value,grau:+$('ptGrau').value,statusAprovacao:'pendente',statusEnvio:'pendente'});
+  rPt(DRAFT.pontes);$('ptTitulo').value='';$('ptData').value='';$('ptMsg').value='';$('ptTom').value='';toast('Ponte adicionada ao rascunho');
+});
+$('btnAddCk').addEventListener('click',()=>{
+  const titulo=$('ckTitulo').value.trim();if(!titulo){toast('Dê um título ao check-in','#7a1f1f');return}
+  DRAFT.checkins.push({id:uid(),titulo,data:$('ckData').value||today(),status:'pendente',cadastrado:false});
+  rCk(DRAFT.checkins);$('ckTitulo').value='';$('ckData').value='';toast('Check-in adicionado ao rascunho');
+});
+$('btnImpPt').addEventListener('click',()=>{
+  try{const arr=JSON.parse($('ptJson').value.trim());let n=0;arr.forEach(it=>{if(!DRAFT.pontes.some(p=>p.titulo===it.titulo)){DRAFT.pontes.push({id:uid(),titulo:it.titulo,data:it.data,msg:it.msg||'',tom:it.tom||'',grau:it.grau||1,statusAprovacao:'pendente',statusEnvio:'pendente'});n++}});rPt(DRAFT.pontes);$('ptJson').value='';toast(`${n} ponte(s) no rascunho — clique Salvar para confirmar`)}catch(e){toast('JSON inválido','#7a1f1f')}
+});
+$('btnImpCk').addEventListener('click',()=>{
+  try{const arr=JSON.parse($('ckJson').value.trim());let n=0;arr.forEach(it=>{if(!DRAFT.checkins.some(c=>c.titulo===it.titulo)){DRAFT.checkins.push({id:uid(),titulo:it.titulo,data:it.data,status:'pendente',cadastrado:false});n++}});rCk(DRAFT.checkins);$('ckJson').value='';toast(`${n} check-in(s) no rascunho — clique Salvar para confirmar`)}catch(e){toast('JSON inválido','#7a1f1f')}
+});
+$('btnSalvH').addEventListener('click',()=>{
+  const txt=$('hTxt').value.trim();if(!txt){toast('Descreva o contato','#7a1f1f');return}
+  DRAFT.hist.push({data:$('hData').value||today(),tipo:$('hTipo').value,txt});rHist(DRAFT.hist);$('hTxt').value='';toast('Contato adicionado ao rascunho');
+});
+$('btnNova').addEventListener('click',()=>openDrw(null));
+$('emptyAdd').addEventListener('click',()=>openDrw(null));
+$('btnCF').addEventListener('click',closeDrw);
+$('btnSave').addEventListener('click',saveDrw);
+$('ov').addEventListener('click',closeDrw);
+$('srch').addEventListener('input',e=>{ST=e.target.value;renderAlu()});
+document.querySelectorAll('th[data-col]').forEach(th=>th.addEventListener('click',()=>{SCOL===th.dataset.col?SDIR*=-1:(SCOL=th.dataset.col,SDIR=1);renderAlu()}));
+$('btnRem').addEventListener('click',()=>{RID=DRAFT.id;$('covMsg').innerHTML=`Remover <strong>${DRAFT.nome}</strong>? Essa ação não pode ser desfeita.`;$('cov').classList.add('on')});
+$('btnCC').addEventListener('click',()=>{$('cov').classList.remove('on');RID=null});
+$('btnCO').addEventListener('click',()=>{$('cov').classList.remove('on');closeDrw();if(RID){AA=AA.filter(x=>String(x.id)!==String(RID));sv();renderAlu();renderDash();renderRep();toast('Aluna removida')}RID=null});
+
+document.querySelectorAll('.nb').forEach(b=>b.addEventListener('click',()=>{
+  document.querySelectorAll('.nb').forEach(x=>x.classList.remove('on'));b.classList.add('on');
+  document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));$('pg-'+b.dataset.pg).classList.add('on');
+  const isAlu=b.dataset.pg==='alu';$('srch').style.display=isAlu?'block':'none';$('btnNova').style.display=isAlu?'inline-flex':'none';
+}));
+
+// app inicia via onAuthStateChanged (ver topo do script)
+</script>
+</body>
+</html>
